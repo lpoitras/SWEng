@@ -1,0 +1,215 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf190
+{\fonttbl\f0\fmodern\fcharset0 Courier;\f1\fmodern\fcharset0 Courier-Oblique;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue109;\red179\green179\blue179;\red15\green112\blue1;
+\red107\green0\blue109;\red107\green0\blue1;\red109\green111\blue3;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720
+
+\f0\fs24 \cf2 #include\cf3  \cf4 "mainwindow.h"\cf0 \
+\cf2 #include\cf3  \cf4 "ui_mainwindow.h"\cf0 \
+\cf2 #include\cf3  \cf4 <QTimer>\cf0 \
+\cf2 #include\cf3  \cf4 <QDateTime>\cf0 \
+\cf2 #include\cf3  \cf4 <QDateTimeEdit>\cf0 \
+\cf2 #include\cf3  \cf4 <QTimeEdit>\cf0 \
+\cf2 #include\cf3  \cf4 <QDateEdit>\cf0 \
+\cf2 #include\cf3  \cf4 <QMediaPlayer>\cf0 \
+\cf2 #include\cf3  \cf4 <QCheckBox>\cf0 \
+\cf2 #include\cf3  \cf4 <QApplication>\cf0 \
+\cf2 #include\cf3  \cf4 <QtCore>\cf0 \
+\cf2 #include\cf3  \cf4 <QtGui>\cf0 \
+\cf2 #include\cf3  \cf4 <QThread>\cf0 \
+\cf2 #include\cf3  \cf4 <QMediaPlaylist>\cf0 \
+\
+\pard\pardeftab720
+\cf5 MainWindow\cf0 ::MainWindow(\cf5 QWidget\cf3  \cf0 *parent)\cf3  \cf0 :\
+\pard\pardeftab720
+\cf3     \cf5 QMainWindow\cf0 (parent),\
+\cf3     \cf6 ui\cf0 (\cf7 new\cf3  \cf5 Ui\cf0 ::\cf5 MainWindow\cf0 )\
+\{\
+\cf3     \cf6 ui\cf0 ->setupUi(\cf7 this\cf0 );\
+\
+\cf3      \cf6 ui\cf0 ->\cf6 cancelAlarm\cf0 ->
+\f1\i setVisible
+\f0\i0 (\cf7 false\cf0 );\
+\pard\pardeftab720
+\cf4 //ui->on_setAlarm_clicked()->;\cf0 \
+\pard\pardeftab720
+\cf6 ui\cf0 ->\cf6 checkBox\cf0 ->setChecked(\cf7 false\cf0 );\
+\pard\pardeftab720
+\cf4 //\cf3     \cf4 ui->checkBox->setHidden(true);\cf0 \
+\pard\pardeftab720
+\cf3     \cf0 showTime();\
+\cf3     \cf5 QTimer\cf3  \cf0 *\cf3  \cf0 timer\cf3  \cf0 =\cf3  \cf7 new\cf3  \cf5 QTimer\cf0 (\cf7 this\cf0 );\
+\cf3     \cf0 connect(timer,\cf3  \cf7 SIGNAL\cf0 (timeout()),\cf3  \cf7 this\cf0 ,\cf3  \cf7 SLOT\cf0 (showTime()));\
+\cf3     \cf0 timer->start();\
+\
+\cf3     \cf5 QTimer\cf3  \cf0 *timer2\cf3  \cf0 =\cf3  \cf7 new\cf3  \cf5 QTimer\cf0 (\cf7 this\cf0 );\
+\cf3     \cf0 connect(timer2,\cf3  \cf7 SIGNAL\cf0 (timeout()),\cf3  \cf7 this\cf0 ,\cf3  \cf7 SLOT\cf0 (on_checkBox_2_clicked()));\
+\cf3     \cf0 timer2->start(\cf2 1000\cf0 );\
+\
+\cf3     \cf6 ui\cf0 ->\cf6 timeEdit\cf0 ->setTime(\cf5 QTime\cf0 ::currentTime());\
+\cf3     \cf6 ui\cf0 ->\cf6 dateEdit\cf0 ->setDate(\cf5 QDate\cf0 ::currentDate());\
+\
+\}\
+\
+\pard\pardeftab720
+\cf7 void\cf3  \cf5 MainWindow\cf0 ::showTime()\
+\{\
+\pard\pardeftab720
+\cf3     \cf5 QTime\cf3  \cf0 time\cf3  \cf0 =\cf3  \cf5 QTime\cf0 ::currentTime();\
+\cf3     \cf5 QString\cf3  \cf0 time_text\cf3  \cf0 =\cf3  \cf0 time.toString(\cf4 "hh\cf3  \cf4 :\cf3  \cf4 mm"\cf0 );\
+\cf3     \cf6 ui\cf0 ->\cf6 Digital_Clock\cf0 ->setText(time_text);\cf3     \cf0 \
+\}\
+\
+\pard\pardeftab720
+\cf7 void\cf3  \cf5 MainWindow\cf0 ::on_setAlarm_clicked()\
+\{\
+\pard\pardeftab720
+\cf3     \cf6 ui\cf0 ->\cf6 cancelAlarm\cf0 ->
+\f1\i setVisible
+\f0\i0 (\cf7 true\cf0 );\
+\
+\pard\pardeftab720
+\cf7 if\cf0 (\cf7 this\cf0 ->\cf6 ui\cf0 ->\cf6 checkBox\cf0 ->isChecked())\
+\pard\pardeftab720
+\cf3     \cf0 \{\
+\cf3         \cf6 ui\cf0 ->\cf6 label2\cf0 ->setText(\cf4 "Alarm\cf3  \cf4 set"\cf0 );\
+\cf3         \cf5 QString\cf3  \cf0 alarmTime\cf3  \cf0 ;\
+\cf3         \cf5 QString\cf3  \cf0 currentTime;\
+\
+\cf3            \cf5 QTimer\cf3  \cf0 *timer2\cf3  \cf0 =\cf3  \cf7 new\cf3  \cf5 QTimer\cf0 (\cf7 this\cf0 );\
+\cf3            \cf0 connect(timer2,\cf3  \cf7 SIGNAL\cf0 (timeout()),\cf3  \cf7 this\cf0 ,\cf3  \cf7 SLOT\cf0 (on_checkBox_2_clicked()));\
+\cf3            \cf0 timer2->start(\cf2 4000\cf0 );\
+\
+\
+\pard\pardeftab720
+\cf4 //\cf3     \cf4 else\cf0 \
+\cf4 //\cf3     \cf4 \{\cf0 \
+\cf4 //\cf3         \cf4 ui->label2->setText("");\cf0 \
+\cf4 //\cf3     \cf4 \}\cf0 \
+\}\
+\}\
+\pard\pardeftab720
+\cf7 void\cf3  \cf5 MainWindow\cf0 ::setAlarm()\
+\{\
+\pard\pardeftab720
+\cf4 //\cf3     \cf4 while(ui->checkBox->checkState()\cf3  \cf4 =\cf3  \cf4 QCheckBox::isChecked(true))\cf0 \
+\cf4 //\cf3     \cf4 QTime\cf3  \cf4 time\cf3  \cf4 =\cf3  \cf4 QTime::currentTime();\cf0 \
+\cf4 //\cf3     \cf4 QString\cf3  \cf4 time_text\cf3  \cf4 =\cf3  \cf4 time.toString("hh\cf3  \cf4 :\cf3  \cf4 mm");\cf0 \
+\cf4 //\cf3     \cf4 QTime\cf3  \cf4 newTime\cf3  \cf4 =\cf3  \cf4 time;\cf0 \
+\cf4 //\cf3     \cf4 QString\cf3  \cf4 time_textNew\cf3  \cf4 =\cf3  \cf4 newTime.toString("hh\cf3  \cf4 :\cf3  \cf4 mm");\cf0 \
+\cf4 //while(ui->checkBox->checkState()\cf3  \cf4 ==\cf3  \cf4 ui->checkBox->isChecked())\{\cf0 \
+\cf4 //\cf3     \cf4 QString\cf3  \cf4 alarmTime\cf3  \cf4 =\cf3  \cf4 QString::number(this->ui->timeEdit->time().hour())\cf3  \cf4 +\cf3  \cf4 QString::number(this->ui->timeEdit->time().minute());\cf0 \
+\cf4 //\cf3     \cf4 QString\cf3  \cf4 currentTime\cf3  \cf4 =\cf3  \cf4 QString::number(QTime::currentTime().hour())\cf3  \cf4 +\cf3  \cf4 QString::number(QTime::currentTime().minute());\cf0 \
+\
+\cf4 //\cf3     \cf4 if\cf3  \cf4 (alarmTime\cf3  \cf4 ==\cf3  \cf4 currentTime)\cf0 \
+\cf4 //\cf3          \cf4 \{\cf0 \
+\cf4 //\cf3             \cf4 QMediaPlayer\cf3  \cf4 *player\cf3  \cf4 =\cf3  \cf4 new\cf3  \cf4 QMediaPlayer(this);\cf0 \
+\cf4 //\cf3              \cf4 player->setMedia(QUrl::fromLocalFile("/Users/lukepoitras/Desktop/cae.mp3"));\cf0 \
+\cf4 //\cf3              \cf4 player->setVolume(100);\cf0 \
+\cf4 //\cf3              \cf4 player->play();\cf0 \
+\cf4 //\cf3          \cf4 \}\cf0 \
+\cf4 //\}\cf0 \
+\}\
+\
+\pard\pardeftab720
+\cf5 MainWindow\cf0 ::~
+\f1\i MainWindow
+\f0\i0 ()\
+\{\
+\pard\pardeftab720
+\cf3     \cf7 delete\cf3  \cf6 ui\cf0 ;\
+\}\
+\
+\
+\pard\pardeftab720
+\cf5 QTime\cf3  \cf5 MainWindow\cf0 ::on_timeEdit_timeChanged(\cf7 const\cf3  \cf5 QTime\cf3  \cf0 &time)\
+\{\
+\pard\pardeftab720
+\cf3     \cf5 QTime\cf3  \cf0 newTime\cf3  \cf0 =\cf3  \cf0 time;\
+\cf3     \cf5 QString\cf3  \cf0 time_text\cf3  \cf0 =\cf3  \cf0 newTime.toString(\cf4 "hh\cf3  \cf4 :\cf3  \cf4 mm"\cf0 );\
+\
+\cf3     \cf6 ui\cf0 ->\cf6 label\cf0 ->setText(time_text);\
+\
+\cf3     \cf7 return\cf3  \cf0 newTime;\
+\}\
+\pard\pardeftab720
+\cf7 void\cf3  \cf5 MainWindow\cf0 ::playAlarm(\cf5 QTime\cf3  \cf0 &newTime)\
+\{\
+\
+\}\
+\
+\cf7 void\cf3  \cf5 MainWindow\cf0 ::on_checkBox_clicked()\
+\{\
+\
+\pard\pardeftab720
+\cf4 //\cf3  \cf4 if(ui->checkBox->isChecked()\cf3  \cf4 ==\cf3  \cf4 true)\cf0 \
+\pard\pardeftab720
+\cf3  \cf0 \{\
+\cf3     \cf5 QString\cf3  \cf0 alarmTime\cf3  \cf0 =\cf3  \cf5 QString\cf0 ::number(\cf7 this\cf0 ->\cf6 ui\cf0 ->\cf6 timeEdit\cf0 ->time().hour())\cf3  \cf0 +\cf3  \cf5 QString\cf0 ::number(\cf7 this\cf0 ->\cf6 ui\cf0 ->\cf6 timeEdit\cf0 ->time().minute());\
+\cf3     \cf5 QString\cf3  \cf0 currentTime\cf3  \cf0 =\cf3  \cf5 QString\cf0 ::number(\cf5 QTime\cf0 ::currentTime().hour())\cf3  \cf0 +\cf3  \cf5 QString\cf0 ::number(\cf5 QTime\cf0 ::currentTime().minute());\
+\
+\cf3     \cf5 QMediaPlaylist\cf3  \cf0 *playlist\cf3  \cf0 =\cf3  \cf7 new\cf3  \cf5 QMediaPlaylist\cf0 (\cf7 this\cf0 );\
+\cf3      \cf0 playlist->addMedia(\cf5 QUrl\cf0 ::fromLocalFile(\cf4 "/Users/lukepoitras/Desktop/understanding.mp3"\cf0 ));\
+\cf3      \cf0 playlist->addMedia(\cf5 QUrl\cf0 ::fromLocalFile(\cf4 "/Users/lukepoitras/Desktop/understanding.mp3"\cf0 ));\
+\cf3      \cf0 playlist->addMedia(\cf5 QUrl\cf0 ::fromLocalFile(\cf4 "/Users/lukepoitras/Desktop/understanding.mp3"\cf0 ));\
+\cf3      \cf0 playlist->addMedia(\cf5 QUrl\cf0 ::fromLocalFile(\cf4 "/Users/lukepoitras/Desktop/understanding.mp3"\cf0 ));\
+\cf3      \cf0 playlist->addMedia(\cf5 QUrl\cf0 ::fromLocalFile(\cf4 "/Users/lukepoitras/Desktop/understanding.mp3"\cf0 ));\
+\cf3      \cf0 playlist->setPlaybackMode(\cf5 QMediaPlaylist\cf0 ::\cf5 Sequential\cf0 );\
+\cf3      \cf0 playlist->setCurrentIndex(\cf2 1\cf0 );\
+\cf3      \cf5 QMediaPlayer\cf3  \cf0 *player\cf3  \cf0 =\cf3  \cf7 new\cf3  \cf5 QMediaPlayer\cf0 (\cf7 this\cf0 );\
+\cf3      \cf0 player->setPlaylist(playlist);\
+\cf3      \cf0 player->setVolume(\cf2 100\cf0 );\
+\
+\pard\pardeftab720
+\cf7 if\cf0 (\cf7 this\cf0 ->\cf6 ui\cf0 ->\cf6 checkBox_2\cf0 ->isChecked()\cf3  \cf0 ==\cf3  \cf7 true\cf0 )\
+\{\
+\pard\pardeftab720
+\cf3     \cf0 \{\
+\cf3          \cf0 playlist->stop();\
+\cf3     \cf0 \}\
+\
+\}\
+\pard\pardeftab720
+\cf7 else\cf0 \
+\pard\pardeftab720
+\cf3     \cf7 if\cf0 (\cf7 this\cf0 ->\cf6 ui\cf0 ->\cf6 checkBox_2\cf0 ->isChecked()\cf3  \cf0 ==\cf3  \cf7 false\cf0 )\
+\cf3     \cf0 \{\
+\cf3         \cf7 if\cf0 (alarmTime\cf3  \cf0 ==\cf3  \cf0 currentTime)\
+\cf3           \cf0 \{\
+\cf3             \cf0 player->play();\
+\cf3           \cf0 \}\
+\cf3     \cf0 \}\
+\cf3   \cf0 \}\
+\}\
+\
+\pard\pardeftab720
+\cf7 void\cf3  \cf5 MainWindow\cf0 ::on_pushButton_clicked()\
+\{\
+\pard\pardeftab720
+\cf4 //\cf3        \cf4 QMediaPlayer\cf3  \cf4 *player\cf3  \cf4 =\cf3  \cf4 new\cf3  \cf4 QMediaPlayer(this);\cf0 \
+\cf4 //\cf3         \cf4 player->setMedia(QUrl::fromLocalFile("/Users/lukepoitras/Desktop/cae.mp3"));\cf0 \
+\cf4 //\cf3         \cf4 player->setVolume(100);\cf0 \
+\
+\cf4 //\cf3         \cf4 player->play();\cf0 \
+\}\
+\
+\pard\pardeftab720
+\cf7 void\cf3  \cf5 MainWindow\cf0 ::on_cancelAlarm_clicked()\
+\{\
+\pard\pardeftab720
+\cf4 //\cf3     \cf4 ui->setAlarm->setVisible(false);\cf0 \
+\}\
+\
+\
+\
+\
+\
+\pard\pardeftab720
+\cf7 void\cf3  \cf5 MainWindow\cf0 ::on_checkBox_2_clicked()\
+\{\
+\
+\}\
+\
+}
